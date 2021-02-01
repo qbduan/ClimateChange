@@ -1,0 +1,464 @@
+
+\documentclass[fleqn,10pt]{wlscirep}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+
+\usepackage{amsmath}
+\usepackage{graphicx,psfrag,epsf}
+\usepackage{enumerate}
+%\usepackage{natbib}
+\usepackage{url} % not crucial - just used below for the URL
+
+%\pdfminorversion=4
+% NOTE: To produce blinded version, replace "0" with "1" below.
+\newcommand{\blind}{0}
+
+%% DON'T change margins - should be 1 inch all around.
+%\addtolength{\oddsidemargin}{-.6in}%
+%\addtolength{\evensidemargin}{-.4in}%
+%\addtolength{\textwidth}{1in}%
+%\addtolength{\textheight}{-.3in}%
+%\addtolength{\topmargin}{-.8in}%
+
+%\usepackage{geometry}
+%\geometry{
+%	a4paper,
+%	total={170mm,257mm},
+%	left=25mm,
+%	right=25mm,
+%	top=25mm,
+%}
+\usepackage[nomarkers,figuresonly,nolists]{endfloat}
+
+
+\usepackage{amsfonts,amssymb,bm}
+\usepackage{mathptmx}%{times}
+\usepackage{newtxtext}
+\usepackage{newtxmath}
+
+\newcommand{\bx}{\mathbf{x}}
+
+\usepackage{xcolor}
+\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+
+\usepackage{graphicx}
+%\graphicspath{ {./Figures/} }
+
+\usepackage{float}
+
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\floatname{algorithm}{Procedure}
+
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+\usepackage{verbatim}
+
+\newcommand{\dc}[1]{#1^{ \circ}\mathrm{C}}
+
+\newcommand{\bs}{\mathbf{s}}
+\newcommand{\qtst}{q(\tau | \bs, t)}
+%\usepackage{natbib}
+\usepackage[caption = false]{subfig}
+\usepackage[export]{adjustbox}
+\usepackage{longtable}
+\usepackage{authblk}
+
+	
+
+\title{\bf {Spatio-temporal quantile regression analysis revealing more nuanced patterns of climate change: a study of long-term daily temperature in Australia}}
+%\author[]{}
+\author[1]{Qibin Duan}
+\author[1]{Clare A. McGrory}
+\author[1]{Glenn Brown}
+\author[1]{Kerrie Mengersen}
+\author[1,*]{You-Gan Wang}
+\affil[1]{School of Mathematical Sciences, Queensland University of Technology, Australia}
+%\affil[]{ARC Centre of Excellence for Mathematical \& Statistical Frontiers (ACEMS)}
+\affil[*]{you-gan.wang@qut.edu.au}
+
+
+%  put the summary for your paper here
+
+%\red{the abstract is required to be within 150 words, but it should be fine for initial submission.}
+\begin{abstract}	
+	%Climate change is commonly associated with an overall increase in mean temperature in a defined past time period. Many studies consider temperature trends at the global scale, but the literature is lacking in in-depth analysis of the temperature trends across Australia in recent decades.
+	%Australia comprises a very wide variety of environmental systems within the same country. It is therefore of great interest to analyse the spatio-temporal patterns of temperature across Australia.
+	%In addition to heterogeneity in mean and median values, daily Australia temperature data suffers from quasi-periodic heterogeneity in variance. However, this issue has barely been overlooked in climate research.
+	% A contribution of this article is that we propose a joint model of quantile regression and variability in order to better account for the heterogeneity in these types of data.
+	%This quantile regression aims to estimate the conditional quantiles of daily temperature and  model all quantile levels jointly. This enables characterization of the entire density function of daily maximum/minimum temperatures as a function of time for each location. Interestingly, our results suggest different patterns of climate change for different percentiles of daily maximum and minimum temperature series over Australia.
+	%Overall, the country appears to be experiencing a warming in daily temperature, where daily maximum temperature is warming by $\sim\dc{0.21}$ per decade and daily minimum temperature by $\sim\dc{0.13}$ per decade.
+	%The lower quantiles for daily maximum temperature increase more than the higher quantiles.
+	%We also find daily maximum temperature can decrease in north Queensland while the daily minimum temperature can also
+	%decrease in the south of Australia.
+	Climate change is commonly associated with an overall increase in mean temperature in a defined past time period. Many studies consider temperature trends at the global scale, but the literature is lacking in in-depth analysis of the temperature trends across Australia in recent decades. In addition to heterogeneity in mean and median values, daily Australia temperature data suffers from quasi-periodic heterogeneity in variance. However, this issue has barely been overlooked in climate research.
+	A contribution of this article is that we propose a joint model of quantile regression and variability.
+	By accounting appropriately for the heterogeneity in these types of data, our analysis reveals
+	%  This enables characterization of the entire density function of daily maximum/minimum temperatures as a function of time for each location.
+	that daily maximum temperature is warming by $\sim\dc{0.21}$ per decade and daily minimum temperature by $\sim\dc{0.13}$ per decade. However, our modeling also shows  nuanced patterns of climate change depends on location, season, and the percentiles  of the temperature series over Australia.
+\end{abstract}
+
+%\noindent
+%{\it Keywords:}  Heterogeneity, Extreme weather, Climate change, Seasonal variance, Quantile regression, Variance model
+%\vfill
+%
+
+\begin{document}
+
+
+\flushbottom
+\maketitle
+
+
+
+
+\section*{Introduction}
+The increase in the intensity and frequency of global extreme weather events, e.g., extreme heat, extreme cold, drought, snow cover decline, is attributed to  fundamental changes in the underlying climate  \cite{JC2,JC1}.  There is also an overall warming trend occurring with the global mean temperature estimated to have risen by  $~\dc{0.85}$ during 1880-2012 \cite{IPCC}. This increasing trend is predicted to continue.
+These changes have already caused and will continue to induce substantial societal and ecological impacts. Unchecked, climate change is hence a major threat now faced by the entire world .
+Human activity is widely argued to be a major cause of  global warming \cite{IPCC2007,IPCC2014}, but a great deal of uncertainty still remains regarding the exact mechanisms that underlie the warming process \cite{Sinha}. As the study \cite{Sinha} highlight, the global surface warming of recent decades has been realized as a succession of periods of warming slowdowns, or hiatus, followed by warming surges.
+
+
+While warming is the trend globally, at the regional and local scales, a wide variety of changes in temperature is observable across the globe \cite{Alexander2006,Brown2008}. Climate changes have been extensively studied at the global scale, but there is also intense interest in understanding patterns of change at a national level\cite{Zhang}. However, this work is still emerging.  Within Australia, for example, in-depth statistical studies on historic temperature changes are limited \cite{QldTempRain}.  Australia is the largest country in Oceania and one of the major producers of agricultural products, so deep understanding of climate change in Australia is of importance.
+
+
+According to the State of the Climate \cite{BOMCSIRO2020}, Australia's climate has warmed on average by $\dc{1.44\pm 0.24}$ since 1910, with most of the warming having occurred since 1950. This has been accompanied by increased frequency of extreme heat events.
+As reported in more detail in the Climate Statement, the overall mean (average of daily maximum and minimum) temperature for the 10 year period from 2010 to 2019 was the highest on record, at $\dc{0.86}$ above the long term overall average since 1910, and $\dc{0.31}$ warmer than the 10 years 2000–2009, which is the second warmest 10-year period \cite{BOM2019}. The climate change within Australia is also spatially varied. For example, for the wet tropical area in far North Queensland, the mean temperature increased by $\dc{1.1}$ between 1910 and 2013 using a linear trend, while in the east coast area in New South Wales, the mean temperature increased by $\dc{0.8}$ in the same period. Moreover, for the Rangelands area, the north part increased $\dc{1}$ and the south part increased $\dc{0.9}$ during the same period \cite{Ekst2015}.
+
+
+The majority of statistical analyses undertaken in climate studies in Australia are based on inference about the maximum, minimum or mean temperature. However, a focus on these measure alone can fail to detect more nuanced patterns of change over space and time.
+In this article we take an approach based on quantile regression estimates of the data with consideration of spatial correlation. Quantile regression was originally proposed by Koenker and Bassett
+(1978)  as an alternative approach to mean regression that does not require the usual strict assumption about normally distributed residuals in the regression models \cite{Koenker1978}. The idea has been used to identify changes over time of any percentiles of climate variables;  see \cite{koenker1994quantile,Barbosa2011,gao2017quantile,Franzke2013} for particular focus on the analysis of temperature series.
+The performance of quantile regression for trend detection analysis has been favorably compared with traditional approaches, such as robust linear regression and the nonparametric M-K test \cite{gao2017quantile}. The spatial and temporal variation can be modeled jointly as  in Reich (2012), in a Bayesian manner\cite{Brian2013}.
+
+One advantage of this approach is that quantile regression estimates are less influenced by extreme outliers in the response measurements than standard linear regression estimates based on the mean. The other big motivation for this approach is that the conditional quantile functions are of interest to us. {The variety of measures} of central tendency and statistical dispersion allow us to describe the relationship at different points in the conditional distribution of the outcome. In this way we obtain a more comprehensive picture of the relationship between the variables. When using quantile regression, we have increased freedom in our modelling in that we are not restricted by the assumption that variable relationships are the same at the median and tails of the distribution as they are at the mean. {Such models could provide a more} in-depth understanding of the historic change in Australian temperature, which can potentially improve anticipation and management of climate risk and associated negative impacts.
+
+We highlight however,  that in analysis of daily Australia temperature data, complicated heterogeneity in variance arises and this must be addressed if results are to be reliable.
+	In this article we propose a joint model including variance as a covariate in our spatio-temporal regression to do so. %We show through simulation studies that this is a sensible approach to dealing with the issue.
+
+%\red{
+%The remainder of this paper is organized as follows. The data and study region are described in Section 2. Exploratory data analysis is carried out in Section 3 and methods of formal data analysis with a simulation study are described in Section 4.  Section 5 presents the results of our real data analysis and Section 6 concludes the paper.}
+
+
+\section*{Results}
+In this study we analyze the spatio-temporal pattern of warming in Australia based on the trends of averages and quantiles of daily maximum and minimum temperatures using recent observed data. The trend function of different quantiles are obtained with using the joint model of quantile regression and variability presented in ``Methods'' section
+
+\subsection*{Data collection and selection}
+
+The geographical boundary of Australia is between $9^{\circ}- 44^{\circ}S$ latitude and  $112^{\circ} - 154^{\circ}E$ longitude (apart from Macquarie Island), with total area of $7,692,024$ $\mathrm{km}^2$. The massive size of the country gives it a wide variety of landscapes, with tropical rainforests in the north-east, mountain ranges in the south-east, south-west and east, and desert and semi-arid land in the center, resulting in a variety of climates across the country.
+%The climate in Australia is also significantly influenced by ocean currents, including the Indian Ocean Dipole and the El Niño–Southern Oscillation, and the seasonal tropical low-pressure system that produces cyclones in northern Australia \red{[We need references for this]}.
+The northern part of the country has a tropical climate, with predominantly summer rainfall. As for the southern part, the south-west corner of the country has a Mediterranean climate, while the south-east ranges from oceanic (Tasmania and coastal Victoria) to humid subtropical (from the upper half of New South Wales), with highlands featuring alpine and subpolar oceanic climates. The interior desert has stable arid and semi-arid climates. More details about the Australian climate can be found on the website of Bureau of Meteorology (BoM), Australia \cite{ClimateInformation}.
+
+The daily maximum (Dmx) and minimum (Dmn) temperature series were obtained from 1,745 weather stations operated by the BoM Australia. These datasets can be accessed through the \texttt{R} package \texttt{bomrang} \cite{bomrang}. The length of these time series varies among different stations from less than 10 years to more than 100 years of observations. The latitude, longitude and elevations of each station are also obtained from the BoM website.
+
+{We restricted the study period from Jan 1, 1960 to Dec 31, 2019, so that most warming periods can be covered and more operating stations could be included} \cite{gmd-13-5175-2020}. As the years of 2000 and 2010 are the starting years of the top two warmest 10-year periods in Australia on record, we considered data from stations not covering these periods to be less meaningful in terms of studying the warming trend in Australia. Therefore, we excluded stations that were not operating during these periods. Furthermore, we excluded the stations with over $20\%$ of missing observations.  As a result, data from 72 stations were included in our analysis.  These stations are geographically distributed as shown in FIG~\ref{fig.distribution}. Specifically, there are 22 stations in Queensland (QLD), 18 in Western Australia (WA), 11 in New south Wales (NSW), 9 in Victoria (VIC), 7 South Australia (SA), 4 in Tasmania (TAS) and 2 in the Northern Territory (NT). The ID number of each station is also included for the sake of description of results.
+
+
+Some examples of pronounced societal and ecological effects associated with variations in Australia temperatures are as follows:
+\begin{itemize}
+	\item  A heatwave occurs when the daily maximum and minimum temperatures are unusually hot over a three-day period at a location. Heat waves affect human health, transportation infrastructure, electricity demand and infrastructure performance, outside labor productivity, and ecology and are a risk to natural systems (e.g., bush fires).
+	\item  Duration of elevated temperatures affects human health, outside labour productivity, transport infrastructure, electricity demand etc. For instance, CSIRO research shows that 4 sequential days of elevated temperature at $\dc{35}$ requires 33\% more cooling energy for a building than does 4 distributed days at the same temperature.
+	%\item  The daily minimum temperatures affect incidence of frosts required for key processes for sweetening fruit, e.g., citrus, grapes etc.
+	\item  Daily and seasonal temperature ranges affect agricultural productivity in terms of crop yields and protein content, and transportation infrastructure. %\red{(say a bit more about transportation)}.
+	%\item Rate of change of warming affecting global risk by reducing the time available to adapt to changing conditions
+	\item Rate of change of warming impacts on human health and ecological communities by reducing the time available to adapt to changing conditions.
+	\item Anomalous and unpredictable temperature patterns increase the risk of adverse events such as bush fires.
+\end{itemize}
+
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figure_stations_no.pdf}
+	\caption{The distribution of selected stations with qualifying data. Blue dots are for (near) coastal stations and yellow dots are for inland stations.}
+	\label{fig.distribution}
+\end{figure}
+
+
+
+
+\subsection*{Trend analysis based on quantiles}
+FIG~\ref{fig.mapdots} shows the values of the trend functions for quantiles 0.1, 0.5 and 0.9 for each of the included stations, respectively, while FIG~\ref{fig.qt.mxmn1} and \ref{fig.qt.mxmn2} show the change in trend function with quantile levels for stations with any trend function $>\dc{0.3}$ . Note that the value represents the total increases in degrees Celsius per decade during the study period of 60 years. {For daily maximum temperature, the average warming trend of all 72 stations is 0.22, 0.22 and $\dc{0.20}$ per decade for quantile levels 0.1, 0.5 and 0.9, respectively, while these values become 0.14, 0.13, $\dc{0.14}$ for daily minimum temperature.}
+
+For all three quantile levels, the daily maximum tempertures are increasing in all stations except for one in north Queensland (station 31 in FIG~\ref{fig.distribution} located in Cardwell Marine Pde QLD), and the values of the trend function per decade mostly lie in the range $(0.1,0.3)$ indicating a warming trend of $\dc{0.6}$ to $\dc{1.8}$ in total during the last 60 years.
+For quantile $0.1$, representing cold daily maximum temperture, there are five stations in NSW that increase by more than $\dc{0.3}$ per decade during the study period.
+Three of these (stations 50, 59 60) are within the range $(0.3,0.4)$ and decrease slightly to $(0.2,0.3)$ for larger quantiles, and another two (station 52, 53) exceed $0.4$ and also decrease for higher quantiles but remain $>0.2$ (FIG~\ref{fig.qt.mxmn2}).  Moreover, other stations (station 38 and 48 in QLD, 8 in WA, 26 in SA, 72 in TAS) have been warming  $\geq\dc{0.3}$ for all three quantile levels per decade, especially for station 8 in TAS around $ \dc{0.4}$. Station 61 in VIC has been warming $>\dc{0.3}$ for the 0.1 quantile, but this decreases to  $<0.3$ for higher quantiles.
+For quantile 0.5, representing median daily maximum temperture, there are eight stations having $>\dc{0.3}$ increase per decade. Of these, stations 20 in NT and 35 in QLD have smaller increases in the 0.1 quantile $<\dc{0.3}$ (FIG~\ref{fig.qt.mxmn1}), and three have $>\dc{0.4}$ increase with two in NSW (station 52 and 53) and one (station 72) in TAS.
+In terms of quantile 0.9, for hot daily maximum temperture, six stations show the $>\dc{0.3}$ increase with two in QLD (station 38 and 48), and one in NSW (station 55), TAS (station 72), WA (station 4) and NT (station 20). The station 31 in QLD (located in Cardwell Marine Pde) shows a declining trend under both 0.5 and 0.9 quantiles (the top panels of FIG~\ref{fig.mapdots}).
+
+\begin{figure}[H]
+	\hspace{-1cm}	\includegraphics[width=1.2\textwidth]{Figure_points_dmx_dmn.pdf}
+	\caption{Quantile trend of $\tau = 0.1,0.5$ and $0.9$ for all 72 stations during the study period. The color of point is the total degrees Celsius that increased/decreased per decade from 1960 to 2019. The top panels are for the Dmx series and the bottom panels are for the Dmn series. }
+	\label{fig.mapdots}
+\end{figure}
+
+
+%\begin{figure}[H]
+%	\includegraphics[width=1.2\textwidth]{Figure_points_dmx_dmn.pdf}
+%	\caption{Quantile trend for all 72 stations for the study period. The color of point is the total degrees Celsius that increased/decreased per decade from 1960 to 2019. The top panels are for the Dmx series and the bottom panels are for the Dmn series. }
+%	\label{fig.mapdots}
+%\end{figure}
+The pattern of the change in trend of Dmn is different from Dmx, as shown in the bottom panels of FIG \ref{fig.mapdots}, where  the values of the trend functions per decade mostly lie in the range $(0.0, 0.3)$, and more stations have a cooling trend with negative values for trend functions.
+The trend function of the quantile 0.1 represents the change of temperature for the extremely cold days,  for which there are 12 stations that show a cooling trend and six of them have been cooling $>\dc{0.1}$ per decade during the study period, i.e., station 12 and 13 in WA, 44 in QLD, 65 and 69 in VIC, and 72 in TAS.
+Nine stations show an increasing trend with amount $>\dc{0.3}$ per decade, i.e., station 3 in WA, station 26 in SA,  six stations in QLD (station 31,34,36,39,41 and 42), and station 55 in NSW ($>\dc{0.4}$).
+For the quantile level 0.5, eight stations show a cooling trend in the south east and south west of Australia with negative values for the trend function, and four (stations 12, 44, 65 and 69) have been cooling $>\dc{0.1}$ per decade.
+Three stations (stations 3, 39 and 55) in WA, NSW show a warming trend with amount $>\dc{0.3}$. For the quantile level 0.9, only four stations still show a cooling trend with two (stations 12 and 13) in WA, one (60) in NSW and one (63) in VIC. Three stations have an increasing trend with $>\dc{0.3}$ degrees with one (station 3) in WA, two (stations 29 and 39) in QLD and one in NSW (station 67).
+
+In terms of the trend function against quantile levels, FIG~\ref{fig.qt.mxmn1} and \ref{fig.qt.mxmn2} display stations with any trend function $>\dc{0.3}$. Note that red curve above blue curve indicates that Dmx has increased more than Dmn, and vice versa.  If trend values increase with quantile level, it indicates bigger variation in the series, and vice versa. A positive trend value in high quantile of Dmx means more extreme heat events and a negative value of trend function in low quantile of Dmn means more extreme cold events.
+For example, stations 4, 8, 20, 35 and 38 in FIG~\ref{fig.qt.mxmn1} and stations 50, 52, 53, 59, 60, 61 and 72 in FIG~\ref{fig.qt.mxmn2} present such a pattern with red curve above blue curve. For station 4, larger quantiles increase more than smaller quantiles for both Dmx and Dmn with all $>0$, indicating warming trend and bigger variation in both series, and more extreme heat events and less extreme cold events.  Station 8 has a pattern with warming trend but smaller variation in both series. While station 20 shows a warming trend in Dmx series with bigger variation and more extreme heat events. As for station 35, it presents a warming trend with more extreme heat events but no bigger variation in Dmx.  Station 52 and 53 present a similar pattern with trend coefficient decrease with quantile level in both series, which indicates a warming trend but smaller variation.  Station 60 and 61 have a warming trend in Dmx, but no clear trend in Dmn. Stations 50 and 59 have a warming trend in both series with smaller variation in Dmx.
+Station 3, 29, 31, and 39  FIG~\ref{fig.qt.mxmn1} and  station 41 in FIG~\ref{fig.qt.mxmn2} have the blue curve above the red curve. Especially for station 31, the Dmx series present a cooling trend for trend coefficient of most quantile $<0$ and a smaller variation. The Dmn show a warming trend and a smaller variation.  Although there are clear trends in both Dmx and Dmn, when it comes to the mean temperature, such trends might be difficult to obtain. For this station, the extreme events occur less.
+
+Note that some stations have red and blue curves crossed, e.g., station 36, 42, 55 and 67, where at that quanitle level both Dmx and Dmn have same trend.
+
+
+%\begin{figure}[H]
+%	\includegraphics[width=0.9\textwidth]{Figure_points_dmn.pdf}
+%	\caption{Quantile trend of Dmn for all 72 stations for the study period.}
+%	\label{fig.mapdots_min}
+%\end{figure}
+
+\begin{figure}[H]
+	\includegraphics[width=0.9\textwidth]{Figureqr_tau_slct1.pdf}
+	\caption{Quantile trend as a function of quantile level for selected stations. The red curve is for Dmx and the blue curve for Dmn. }
+	
+	\label{fig.qt.mxmn1}
+\end{figure}
+\begin{figure}[H]
+	\includegraphics[width=0.9\textwidth]{Figureqr_tau_slct2.pdf}
+	\caption{Quantile trend as a function of quantile level for selected stations. The red curve is for Dmx and the blue curve for Dmn. }
+	
+	\label{fig.qt.mxmn2}
+\end{figure}
+
+\subsection*{Spatial pattern of trend}
+
+
+The spatial pattern of trend functions across Australia is shown in Figure~\ref{fig.mapsp1} for the trend of Dmx (in the top panels) and Dmn (in the bottom panels), respectively. For 0.1 quantile of Dmx, the values of trend function are all positive with warming trend for cold days (after removing seasonality). The north-east area including NSW, VIC, TAS, south part of QLD and east part of SA appear to experience more of an increase than other regions under the 0.1 quantile of Dmx, with $\geq \dc{0.3}$ increase per decade in the last 60 years. This area covers the most part of the Murray–Darling basin, which experienced water loss in the last few years \cite{MDwaterloss}. We especially highlight TAS and greater Sydney area which increase the most at nearly $\dc{0.4}$.  In contrast, the far north QLD and the north-west corner of WA have the least change with around $\dc{0.1}$ increase in the same period.
+In terms of the 0.5 quantile of Dmx, TAS and parts of NSW still have mostly increasing temperatures with  $>\dc{0.3}$, while other areas have $\dc{0.1}$ to $\dc{0.3}$ increase, except for the north of QLD and the north-west corner of WA showing a non-significant increase $\leq\dc{0.1}$. When it comes to the 0.9 quantile, parts of the north of QLD show a non-significant increase, or even decrease. Other regions generally have a warming trend of $\dc{0.2}$ to $\dc{0.3}$.
+
+\bigskip
+
+The trend of Dmn series perform differently. For 0.1 quantile of Dmn,  south QLD, small region of north coast of WA, coastal area near Sydney and Adelaide show a warming trend around $\geq\dc{0.3}$. These areas continue to show warming trend for the 0.5 quantile, but not for the 0.9 quantile. While other regions have less of an increase with $\leq\dc{0.2}$ for 0.1 quantile, and some areas (south-east and south-west region of Australia) even show a cooling trend with a negative value of trend function.
+For 0.5 quantile, most parts of Australia does not show a significant increase, with most values of trend function lying 0 to $\dc{0.1}$, while the south-east area experiences a consistent cooling. However, no significant cooling trend is shown for the 0.9 quantile. Instead, inland parts of QLD and north coast of WA show an increase with $~\dc{0.3}$.
+
+\begin{figure}[H]
+	\hspace{-1cm} \includegraphics[width=1.2\textwidth]{Figure_map_all.pdf}
+	\caption{Quantile trend of $\tau = 0.1,0.5$ and $0.9$ for overall Australia during the study period.  The color of point is the total degrees Celsius that increased/decreased per decade from 1960 to 2019. The top panels are for the Dmx series and the bottom panels are for the Dmn series. }
+	\label{fig.mapsp1}
+\end{figure}
+
+\section*{Discussion}
+
+
+This article has provided a detailed looked at the changes in temperature across Australia in recent decades.
+
+In this study, we raised the heterogeneity issue in the daily temperature time series with an exploratory analysis, where the intra-annual sample variance has quasi-periodic variations and temporal correlations. Such issues lead to inaccurate estimation of parameters coefficients, if they are not handled appropriately. Specifically, the trend detected might be misleading to a large extent. Many studies also suggest that the Long-range
+dependence (LRD) in a time series, if a time series displays a slowly declining autocorrelation function (ACF) in variance, can significantly increase the uncertainty of trend detection \cite{yue2002influence,Fatichi2009,Franzke2010,Franzke2012,gao2017quantile}.  Note that LRD can be also reflected from the ACF of residuals in a mean regression model.  To include all the heterogeneity of variance into the model, GARCH model is used to model the variance of temperature time series. It also suggests that GARCH model can capture the shape of the ACF of volatility in daily financial return series, and is consistent with long-memory based on semiparametric and parametric estimates \cite{maheu2005can}. Hence, our variance model not only accounts for seasonality and temporal correlation, but also reduces the uncertainty caused by LRD.
+
+Spatio-temporal quantile regression has been applied to analyze the temperature series from 72 meteorological stations in Australia. By including the variance term as co-variate in the quantile model, the proposed quantile regression approach has considered all heterogeneity including quasi-periodic variations and temporal correlations. We only include the linear trend in the modeling as both linear and quadratic trend showed a similar pattern during the study period. Hence, our model can detect a reliable trend in the temperature time series.
+
+With analysis of results, we confirm the different patterns of climate change for different percentiles of daily maximum and minimum temperature series over Australia. Overall, the country appears to be experiencing a warming in daily maximum temperature except for a small area in far north QLD, and both cold and hot days are tending to get get warmer. A warming trend in hot days will lead to more frequent extreme heat events. Generally, NSW, south QLD and TAS experience the most significant warming in daily maximum temperature compared with other regions.
+
+In terms of daily minimum temperature,  South QLD and the north coast of WA experience more warming than other part of Australia. However, the warming trend is less significant than for daily maximum temperature. The daily minimum temperature series is associated with extreme cold events. Specifically, VIC, TAS and south WA have increasing number of extreme cold days.
+Notably, South QLD experiences an overall climate warming in both maximum and minimum temperature, leading to more frequent hot days and fewer cold days.
+The year round warming trends in South QLD may have significant adverse impacts on agricultural production in Queensland which is currently aiming to boost
+from AUD\$60  to 100 billion by 2030.
+NSW experiences a climate warming in daily maximum temperature with more hot days, but stable daily minimum temperature. VIC and TAS get a more extreme weather, where VIC get much more extreme cold days and slightly more extreme hot days, while TAS has much more extreme hot days and slightly more extreme cold days.  When we look into summer, NSW, VIC, SA and south QLD experience a more warming summer than other regions that have no significant warming trend in summer.  Winter generally gets warmer in most regions in Australia but gets less warmer in VIC with regards to daily maximum temperature. In daily minimum temperature series, it gets quite a bit warmer in QLD, while other regions only get slightly warmer or even colder in south WA, NSW and VIC.
+
+It is worthy nothing that our model results in different changing rates with that presented in regional reports \cite{Ekst2015,Moise2015,Timbal2015,Watterson2015,Grose2015,Hope2015,McInnes2015}. This is because these reports focused on the period between 1910 and 2013 with using a linear trend to obtain the changing rate. However, as noted in the report \cite{BOMCSIRO2018}, most warming in Australia occurs after 1950 and post-1950 period has faster warming rate than pre-1950 period.
+
+There are some limitations we need to take into account when interpreting the results and analysis.
+%There are not enough meteorology station are included in the study due to the data quality and study period.
+The included stations are not distributed evenly as there are very few stations in the inland region of WA, NT and SA. This could lead to over-generalization of conclusions in these areas. Also, in spatio-temporal quantile regression, we only consider the location coordinates of stations, but we do not to account for the impact of geography, e.g., river catchment, mountain range and distance to ocean. %This might lead some of variation unexplained and incorrect trend %estimate.
+
+\section*{Methods}
+\subsection*{Exploratory Analysis}
+\label{sec:preli}
+
+The daily temperature time series are affected by seasonality, with quasi-periodic variations in both sample mean and variance; see \cite{campbell2005weather,benth2007volatility,benth2007spatial,sirangelo2017stochastic}. An example is shown in the bottom panels in Fig~\ref{fig.examplefit}, where the sample mean and variance of a particular station are calculated over 60 years of observations. %Clearly both sample mean and variance have quasi-periodic variations.
+Other stations had different patterns, depending on the respective ecosystem, but they similarly exhibited this phenomenon.
+
+Such mean periodicity in the series can be easily handled with parametric harmonic functions (or truncated Fourier series). Ignoring the seasonality or heterogeneity in variance for the time being, the observed daily temperature time series can be modelled as follows.
+\begin{equation} \label{eq.meanmdl}
+	y_{t}(\bs) = \mu_{t}(\bs) + \sigma(\bs)\epsilon_t(\bs), \quad \epsilon_t(\bs) \sim_{iid} N(0,1),
+\end{equation}
+where $t$ is $t$-th day from January 1, 1960 to December 31, 2019, $\bs$ is a particular station, and expected value $\mu_{t}(\bs)$ is given by
+\begin{equation}\mu_{t}(\bs)= \beta_{0}(\bs) + \beta_{1}(\bs) t + \mathbf{\beta}_2(\bs) \bx_t(\bs) + FSk(t,\boldsymbol{a}(\bs),\boldsymbol{b}(\bs)) + \sum_{i=1}^p \rho_i(\bs) e_{t-i}(\bs).
+\end{equation}
+{Note that $\epsilon_t(\bs)$ is assumed white-noise and small-scaled relative to the scale of $\mu_{t}(\bs)$ and $\sigma^2(\bs)$ is constant in location $\bs$.}
+Here $FSk(t,\boldsymbol{a}(\bs),\boldsymbol{b}(\bs))$ is the k-th order truncated Fourier series, and $\sum_{i=1}^p \rho_i(\bs) e_{t-i}(\bs)$ is an $AR(p)$ process.The term $\mathbf{\beta}_2(\bs) \bx_t(\bs)$ is the term for other covariates, and in the following we consider the inclusion of the Southern Oscillation Index (SOI) values. For simplicity of notation, we denote the $k$th order truncated Fourier series as follows
+\[ FSk(t,\boldsymbol{a}(\bs),\boldsymbol{b}(\bs)) = \sum_{j=1}^{k}\left[ a_{j}(\bs) \sin\left(\frac{2\pi j t}{D_t}\right) +b_{j}(\bs) \cos\left(\frac{2\pi j t}{D_t}\right) \right],\]
+where $\boldsymbol{a}(\bs) = (a_1(\bs),\ldots,a_k(\bs))$ and $\boldsymbol{b}(\bs) = (b_1(\bs),\ldots,b_k(\bs))$ are the coefficients of harmonic terms for station $\bs$, and $D_t$ denotes the number of days in the respective year.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{fig_res2fitted6plots64.pdf}
+	\caption{Exploratory analysis for a single station. Top left: fitting parametric mean model for Dmx. Top right: residuals of fit against predicted Dmx for the parametric mean model. Middle left: Auto-Correlation Function (ACF) plot for residuals for lag up to 800 days. Middle right: ACF plot for squared residuals for lag up to 800 days. Bottom left: sample mean over 60 years. Bottom right: sample variance over 60 years. }
+	\label{fig.examplefit}
+\end{figure}
+
+The red curve in the top left panel of Fig~\ref{fig.examplefit} shows the fitted values of $\mu_{t}(\bs)$ for one station for illustration; these are obtained from the model in Eq~\eqref{eq.meanmdl}. The top right panel shows the residuals against fitted values which clearly indicates the heterogeneity issue in variance. This leads to the failure of the equal variance assumption in Eq~\eqref{eq.meanmdl}. Tests of of temporal auto-correlation are shown in the middle panels: for this station, no substantial auto-correlation is found for the residuals, while significant and quasi-periodic auto-correlation is found in the squared residuals.
+
+Although the heterogeneity issue is not emphasized and indeed often ignored in many climate themed articles, some models have been proposed to address it. For instance, in the model of the daily average temperature of four US cites, variance is accounted for via a GARCH process \cite{campbell2005weather}.
+ In some studies, for example, ARCH models were employed\cite{benth2005stochastic,benth2007spatial,benth2007volatility}, while Sirangelo (2017) models the inter-annual sample variance $\hat{\sigma}_d^2(\bs)$ as simple periodic functions \cite{sirangelo2017stochastic}.
+
+
+In this study, we model the variance of daily temperature with the inter-annual sample variance. Let $y_{i, d}(\bs)$ be the maximum (or minimum) daily temperature on the $d$-th day of year $i$ recorded at station $\bs$. Note that we assume there are 365 days for each year and February the 29$^{th}$ was omitted in the analysis.
+
+For each particular day, $d$, for station $\bs$, we compute the inter-annual sample mean and variance, denoted as $\hat{\mu}_{d}(\bs)$ and $\hat{\sigma}_{d}^2(\bs)$:
+\begin{equation}
+\hat{\mu}_{d}(\bs) = \frac{1}{T}\sum_{i=1}^T y_{i,d}(\bs),\qquad \hat{\sigma}^2_{d}(\bs) = \frac{\sum_{i=1}^T (y_{i,d}(\bs)-\hat{\mu}_{d}(\bs))^2}{T-1},
+\end{equation}
+where $T$ is number of years that are included in the analysis.
+
+The inter-annual mean is modeled as follows
+\begin{equation}
+	\mu_{d}(\bs) = \hat{\mu}_{d}(\bs) + \epsilon_{d}(\bs),
+\end{equation}
+where $\epsilon_{d}(\bs) = \hat{\sigma}_{d}(\bs) \delta_{d}(\bs)$ and $\delta_{d}(\bs)\sim_{iid} N(0,1)$.  We include the inter-annual mean and  squared mean as a covariate of variance function at the end of the equation below. The model selection results can be found in Supplementary document Section S1.
+
+\begin{equation} \label{eq.model4}
+	\log\left(\sigma^2_{d}(\bs)\right) =  \beta_0(\bs) + \beta_1(\bs)\mu_{d}(\bs) +\beta_2(\bs) \mu_{d}^2(\bs) +FSk(d,\boldsymbol{a}(\bs),\boldsymbol{b}(\bs)) + \rho_1(\bs) \left(\hat{\sigma}_{d-1}^2(\bs) - \sigma^2_{d-1}(\bs)\right) .
+\end{equation}
+
+
+%and model ~\eqref{eq.model4} outperforms other models in terms of AIC %and BIC over all the 72 stations.  The fitted values of the variance function will be used later for spatialtemporal %quantile regression modeling.
+
+We have tested and compared a number of variance models to account for the
+inter-annual  heterogeneity that varies from site to site. Different orders of Fourier series have been  tested and selected as $k=4$.  Quantile regression requires the heterogeneity function at each quantile level (except $\tau=0.50$),
+we therefore need to jointly estimate the regression parameters and variance parameters.
+
+\subsection*{Joint Models for Quantile Regression and Variability}
+
+Quantile regression permits simultaneous analysis of several features of the response distribution.   To jointly model all quantiles simultaneously and spatially, while accounting for heterogeneity, we propose here an improved version of the spatio-temporal quantile regression approach proposed by Reich (2012)  and apply it to the Australian daily temperature data \cite{Brian2013}.
+%\subsection{Spatial-temporal quantile regression with heterogeneity}
+
+Now considering heterogeneity in variance, the model in Eq~\eqref{eq.meanmdl} can be modified as follows:
+\begin{equation} \label{eq.qrt1}
+	y_{t}(\bs) = \mu_{t}(\bs) + \sigma_t(\bs)\epsilon_t(\bs), \quad \epsilon_t(\bs) \sim_{iid} f(\bs),
+\end{equation}
+where $f(\bs)$ is the PDF of $\epsilon_t(\bs)$; we denote $F(\bs)\in [0,1]$ to be the corresponding CDF at location $\bs$.
+
+The   quantile function $q(\tau |\bs,t)$ is the function that satisfies $\mathbb{P}\{y_t(\bs)<q(\tau | \bs, t)\}= \tau \in [0,1]$. Inserting Eq~\eqref{eq.qrt1} into this expression we have $\mathbb{P}\{\mu_{t}(\bs) + \sigma_t(\bs)\epsilon_t(\bs)<q(\tau | \bs, t)\}= \tau$ and the quantile function $q(\tau |\bs,t)$ can be expressed as follows.
+
+\begin{equation}\label{eq.qrt2}
+	q(\tau |\bs,t) = \mu_{t}(\bs)+\sigma_t(\bs)F^{-1}(\tau),
+\end{equation}
+where $F^{-1}(\tau)$ is the inverse CDF. If the error term $\epsilon_t(\bs)$ is assumed normally distributed, then $F^{-1}(\tau) = \Phi^{-1}(\tau)$. In this study, we are interested in testing the changes in the quantile function $q(\tau |\bs,t)$ over time $t$ for each $\tau$. Therefore, in  Eq~\eqref{eq.qrt2}, the term  $\sigma_t(\bs)$ needs to account for the time variable $t$. For example, for the case of a Gaussian distributed response with linear trend over time in Chandler (2005) ,   the mean  is modeled as $\mu_{t}(\bs) = \beta_0(\bs)+\beta_1(\bs)t$, and the standard deviation $\sigma_t(\bs) = \theta_0(\bs) + \theta_1(\bs) t$, with $F^{-1}(\tau) = \Phi^{-1}(\tau)$ \cite{Chandler2005}. Here, the standard deviation changes linearly with time $t$.
+The Gaussian assumption is generalized by Reich (2012), by incorporating a piece-wise Gaussian basis function to describe the linearly changing heterogeneity more flexibly for a non-Gaussian distributed response\cite{Brian2013}. Furthermore, this model is able to characterize the entire quantile process with accommodation of non-Gaussian features, such as asymmetry and heavy or light tails. However, the model of Reich (2012) was  proposed for a set of annual monthly temperature data without consideration of seasonality in mean and variance. Therefore, it is not applicable to daily temperature data.
+
+In daily temperature data, the quantile function should change periodically according to the season. To model such seasonality, as discussed in our exploratory analysis, we include the $k$-th order truncated Fourier series in the quantile function. Moreover, to investigate the impact of extreme climate events, the Southern Oscillation Index (SOI) is included as a covariate. The short term changes in Australia's climate are mostly associated with  El Niño or La Niña events that indexed by the SOI.  Including the SOI index in the model can remove the short-term natural variability from the long-term warming trend.
+
+Next, we will describe our generalized model which is suitable for daily temperature data. It is worth noting that the model is specifically tailored for trend detection so that the time period $t$ is confined within $[0,1]$ to satisfy the constraints of a quantile function $q(\tau|\bs,t)$ increasing in $\tau$ as suggested in Reich (2012).  A model that is directly derived from Reich (2012)  is as follows in Eq~\eqref{eq.qtstfs4}.
+
+Let $0=\kappa_1<\ldots<\kappa_{L+1}=1$ be a grid of equally spaced knots covering $[0,1]$. Then, for $l$  with $\kappa_l<0.5$,
+\[
+B_l(\tau)=\begin{cases}
+\Phi^{-1}(\kappa_l)-\Phi^{-1}(\kappa_{l+1}) & \text{if}\quad \tau < \kappa_l \\
+\Phi^{-1}(\tau)-\Phi^{-1}(\kappa_{l+1}) &\text{if}\quad \kappa_l \leq \tau < \kappa_{l+1} \\
+0 &\text{if}\quad  \kappa_{l+1} \leq \tau
+\end{cases}\]
+and, for $l$ such that $\kappa_l\geq 0.5$,
+
+\[
+B_l(\tau)=\begin{cases}
+0 &\text{if}\quad \tau < \kappa_l \\
+\Phi^{-1}(\tau)-\Phi^{-1}(\kappa_{l+1}) &\text{if}\quad \kappa_l \leq \tau < \kappa_{l+1} \\
+\Phi^{-1}(\kappa_{l+1})-\Phi^{-1}(\kappa_{l}) &\text{if}\quad  \kappa_{l+1} \leq \tau
+\end{cases}.\]
+
+Each quantile is assumed to be a function of time $t$ for each station as follows:
+
+
+\begin{equation}\label{eq.qtstfs4}
+	\qtst=g_0(\tau| \bs)+ g_1(\tau|\bs)t + g_2(\tau|\bs) x_{soi} + FSk(t,\boldsymbol{g}_s(\tau|\bs),\boldsymbol{g}_c(\tau|\bs)),
+\end{equation}
+where $\boldsymbol{g}_s(\tau|\bs) = (g_3(\tau|\bs),\ldots,g_{k+2}(\tau|\bs))$, $\boldsymbol{g}_c(\tau|\bs) = (g_{k+3}(\tau|\bs),\ldots,g_{2k+2}(\tau|\bs))$, and for each $k$, $g_k(\tau|\bs)$ is taken to be linear combinations of $L$ basis functions,
+\begin{equation}
+	g_k(\tau|\bs) = \beta_k(\bs) +\sum_{l=1}^L B_l(\tau)\theta_{k,l}(\bs).
+\end{equation}
+
+The trend function  $g_1(\tau|\bs)$ is of our particular interest for trend detection in this study.  Note that when $g_k(\tau|\bs) = 0$ for all $k>1$, model in Eq \eqref{eq.qtstfs4} degenerates to a linear model that is exactly the same as that used in \cite{Brian2013}.  If further, we let $L=1$ and $B_1(\bs)=\Phi^{-1}(\tau)$,  we obtain the special Gaussian case that corresponds to the model in \cite{Chandler2005}.
+
+
+Eq \eqref{eq.qtstfs4} can be further written as,
+\begin{equation}\label{eq.qtstfs4_beta_theta}
+	\begin{split}
+		\qtst=&\underbrace{\beta_0( \bs)+ \beta_1(\bs)t + \beta_2(\bs) x_{soi} + FSk(t,\boldsymbol{\beta}_s(\bs),\boldsymbol{\beta}_c(\bs))}_{\mu_t(\bs)}   \\
+		&+\sum_{l=1}^{L}B_l(\tau) \underbrace{\left[\theta_{0,l}(\bs)+\theta_{1,l}(\bs)t + \theta_{2,l}(\bs)x_{soi} +FSk(t,\boldsymbol{\theta}_{s,l}(\bs),\boldsymbol{\theta}_{c,l}(\bs))  \right]}_{\sigma_l(\bs,t)},
+	\end{split}
+\end{equation}
+where $\boldsymbol{\beta}_s(\bs)= (\beta_i(\bs),\ldots,\beta_{k+2}(\bs))$, $\boldsymbol{\beta}_c(\bs)= (\beta_{k+3}(\bs),\ldots,\beta_{2k+2}(\bs))$, $\boldsymbol{\theta}_{s,l}(\bs)= (\theta_{3, l},\ldots,\theta_{k+2, l})$, and $\boldsymbol{\theta}_{c,l}(\bs)= (\theta_{k+3, l},\ldots,\theta_{2k+2, l})$. In Eq \eqref{eq.qtstfs4_beta_theta}, $\beta_k(\bs)$, the center of the quantile function at location $\bs$, and $\theta_{k,l}(\bs)$ are unknown coefficients that determine the shape of the quantile function.
+
+Here, adding these terms facilitates the model to account for seasonal heterogeneity in variance. However, auto-correlations in both mean and variance are not considered. Moreover, the variance function also depends on the mean values according to the exploratory analysis in Section \ref{sec:preli}. To account for all information, we further improve the model by replacing the  $\theta_{0,l}(\bs) +FSk(t,\boldsymbol{\theta}_{s,l}(\bs),\boldsymbol{\theta}_{c,l}(\bs))$ with $\theta_{2k+3,l}(\bs)\sigma_{d(t)}(\bs)$ in $\sigma_l(\bs,t)$, where $d(t)$ is the $d(t)$-th day of a year for the $t$-th time point and $\sigma_{d(t)}(\bs)$ is modeled in Eq \eqref{eq.model4}. The new model is given as follows
+\begin{equation}\label{eq.qtstfs4_beta_theta_sigma}
+	\begin{split}
+		\qtst=&\underbrace{\beta_0( \bs)+ \beta_1(\bs)t + \beta_2(\bs) x_{soi} + FSk(t,\boldsymbol{\beta}_s(\bs),\boldsymbol{\beta}_c(\bs))}_{\mu_t(\bs)}   \\
+		&+\sum_{l=1}^{L}B_l(\tau) \underbrace{\left[\theta_{1,l}(\bs)t + \theta_{2,l}(\bs)x_{soi} + \theta_{2k+3,l}(\bs)\sigma_{d(t)}(\bs) \right]}_{\sigma_l(\bs,t)}.
+	\end{split}
+\end{equation}
+Note that the model in Eq \eqref{eq.qtstfs4_beta_theta_sigma} is equivalent to adding a new term $g_{2k+3l}(\tau|\bs)\sigma_{d(t)}$ to Eq \eqref{eq.qtstfs4_beta_theta} and turning some unknown parameters ($\beta_{2k+3,l}(\bs)$, $\theta_{0,l}(\bs)$, $\boldsymbol{\theta}_{s,l}(\bs)$ and $\boldsymbol{\theta}_{c,l}(\bs)$) to zeros. Compared with the model in Eq \eqref{eq.qtstfs4_beta_theta}, the model in Eq \eqref{eq.qtstfs4_beta_theta_sigma} has far fewer unknown parameters to estimate.  In both spatio-temporal quantile models Eq \eqref{eq.qtstfs4_beta_theta} and \eqref{eq.qtstfs4_beta_theta_sigma}, the quantile function can vary spatially by allowing both the $\beta_k(\bs)$ and $\theta_{k,l}(\bs)$ to be Gaussian spatial processes with exponential covariance. The $\beta_k$ are independent Gaussian processes with mean $\bar{\beta}_k$ and covariance $COV(\beta_k(\bs),\beta_k(\bs'))= \psi_{\beta_k}^2\exp(-||\bs-\bs'||/\rho_{\beta_k})$. The $\theta_{k,l}$ are modeled similarly with mean $\bar{\theta}_{k,l}$ and covariance $COV(\theta_{k,l}(\bs),\theta_{k,l}(\bs'))= \psi_{\theta_k}^2\exp(-||\bs-\bs'||/\rho_{\theta_k})$, but they must satisfy $\sigma_l(\bs,t)>0$ for all $l$ and $t$.
+
+\bigskip
+The density function of $y_t(\bs)$ can be expressed in a closed form. Firstly, the quantile function can be written as
+\begin{equation}\label{eq.qtst10}
+	q(\tau|\bs,t) = \sum_{l=1}^{L} \left[a_l(\bs,t) + \sigma_{l}(\bs,t)\Phi^{-1}(\tau) \right] I_{\{\kappa_{l}\leq \tau < \kappa_{l+1}\}},
+\end{equation}
+where $\sigma_{l}(\bs,t)$ is the coefficient of $B_l(\tau)$ and $a_l(\bs,t) = q(\kappa_{l+1}|\bs,t) - \sigma_{l}(\bs,t)\Phi^{-1}(\kappa_{l+1})$ if $\kappa_{l}<0.5$ and $a_l(\bs,t) = q(\kappa_{l}|\bs,t) - \sigma_{l}(\bs,t)\Phi^{-1}(\kappa_{l})$ if $\kappa_{l} \geq 0.5$. Then the density function of $y_t(\bs)$ is given as follows
+\begin{equation} \label{eq.density}
+	\begin{split}
+		f(y_t(\bs)) =& \sum_{l=1}^{L} I_{\{q(\kappa_l|\bs,t)< y_t(\bs)\leq q(\kappa_{l+1}|\bs,t)\}} N(y_t(\bs) | a_l(\bs,t),\sigma_l(\bs,t)^2),\\
+	\end{split}
+\end{equation}
+%& \sum_{l=1}^{L} I_{\{q(\kappa_l|\bs,t)< y_t(\bs)\leq q(\kappa_{l+1}|\bs,t)\}} N(y_t(\bs) | a_l(\bs,t),\sigma_l(\bs,t)^2)
+where $\sigma_l(\bs,t) >0$ for all $l$ and $t$ at each location $\bs$.
+
+\bigskip
+Additional residual correlation is assumed to be an AR(1) process and handled with a copula approach using a latent residual process that is implemented in \cite{Brian2013}. Let $v_t(\bs)$ be a latent Gaussian process modeled as follows,
+\begin{equation}
+	\begin{split}
+		v_1(\bs) &= w_1(\bs) \\
+		v_t(\bs) &= \rho_v v_{t-1}(\bs) + \sqrt{(1-\rho_v^2)}w_t(\bs), \quad\textrm{for}\quad t>1,
+	\end{split}
+\end{equation}
+where $|\rho_v|<1$ and $w_t(\bs)$ are independent spatial process with mean 0 and covariance $COV(w_t(\bs), w_t(\bs')) = \exp(-||\bs-\bs' ||/\psi_w)$. Here, $v_t(\bs)\sim N(0,1)$ for each $\bs$ and $t$, and let $u_t(\bs) = \Phi(v_t(\bs))\sim U(0,1)$. Let $\tau = u_t(\bs)$ in Eq \eqref{eq.qtst10}; then we have
+\begin{equation}\label{eq.qtst_yt}
+	y_t(\bs) = q(u_t(\bs)|\bs,t) = \sum_{l=1}^{L} \left[a_l(\bs,t) + \sigma_{l}(\bs,t)u_t(\bs) \right] I_{\{\kappa_{l}\leq u_t(\bs) < \kappa_{l+1}\}},
+\end{equation}
+and
+\begin{equation} \label{eq.density_yt}
+	\begin{split}
+		f(y_t(\bs)) =& \sum_{l=1}^{L} I_{\{\kappa_{l}\leq u_t(\bs) < \kappa_{l+1}\}} N(y_t(\bs) | a_l(\bs,t),\sigma_l(\bs,t)^2).\\
+	\end{split}
+\end{equation}
+
+\bigskip
+%For model inference,  parameters are estimated in a Bayesian manner via the Markov chain Monte Carlo method that was implemented in \citet{Brian2013}. Note that $\beta_k$ and $\theta_{k,l}$ are model parameters and randomly sampled from their prior distributions (which are Gaussian spatial process) using a Gibbs sampling approach. Hype-parameters ($\psi_{\beta_k}$, $\rho_{\beta_k}$, $\psi_{\theta_{k}}$ and $\rho_{\theta_k}$) are used to characterize the prior distributions of model parameters and they are updated by using Metropolis sampling with Gaussian candidate distribution (tuned to give roughly 40\% acceptance rate). In the residual correlation modeling, the $w_t$ are independent of time $t$ and sampled similarly with $\beta_k$ and $\theta_{k,l}$. Also, $\rho_v$ and $\psi_w$ are distributional parameters and sampled with Metropolis sampling. The closed form density function in Eq \eqref{eq.density} is used to construct the likelihood function.
+
+For model inference,  parameters are estimated in a Bayesian manner via the Markov chain Monte Carlo method that was implemented in Reich (2012) \cite{Brian2013}. Note that $\beta_k(\bs)$ and $\theta_{k,l}(\bs)$ are model parameters and randomly sampled from their prior distributions (which are Gaussian spatial process) using a Gibbs sampling approach. Here random samples of $\theta_{k,l}(\bs)$ must satisfy that $\frac{d q(\tau|\bs,t)}{d \tau}>0$.   Hype-parameters $\bar{\beta}_k(\bs)$ and $\bar{\theta}_{k,l}(\bs)$ are used to characterize the mean of prior distributions of $\beta_k(\bs)$ and $\theta_{k,l}(\bs)$, and
+ $\psi_{\beta_k}$, $\rho_{\beta_k}$, $\psi_{\theta_{k}}$ and $\rho_{\theta_k}$ are used to characterize the variance. Uninformative priors for the hyper-parameters are used, where $\bar{\beta}_k$ and $\bar{\theta}_{k,l}$ have $N(0,10^2)$ priors, and $\psi_{\beta_k}$, $\rho_{\beta_k}$, $\psi_{\theta_{k}}$ and $\rho_{\theta_k}$ have $InvGamma(0.1,0.1)$ priors. In the residual correlation modeling, the auto-correlation $\rho_v$ has a $U(-1,1)$ prior and $\psi_w$ also has an $InvGamma(0.1,0.1)$ prior. Gibbs sampling is used for $\bar{\beta}_k(\bs)$, $\bar{\theta}_{k,l}(\bs)$ and $\rho_v$, while other spatial range hyper-parameters are updated by using Metropolis sampling with Gaussian candidate distribution (tuned to give roughly 40\% acceptance rate).
+
+
+\section*{Acknowledgements}
+The authors appreciated Professor Brian Reich for sharing the R code for the implementation of his spatio-temporal quantile regression model. The authors acknowledge the support of  ARC Centre of Excellence for Mathematical \& Statistical Frontiers (ACEMS) under the grant number CE140100049.
+
+\section*{Data availability}
+Data is available on request from the corresponding author, and also can be obtained from the website of Bureau of Meteorology Australia and the \texttt{R} package \texttt{bomrang}.
+\section*{Code availability}
+Code for data analysis is available on request from the corresponding author.
+\section*{Author contributions}
+QD undertook the data collection and analysis, developed and implemented the methodology, and drafted the manuscript. CM developed the methodology and drafted the manuscript. GB initiated the study and reviewed the manuscript. KM reviewed and edited the manuscript. YGW designed the study, advised the methodology development, and reviewed and edited the manuscript.
+
+\section*{Competing interests}
+The author(s) declare no competing interests.
+
+\bibliographystyle{naturemag-doi}
+% \bibliography{references}
+%\bibliographystyle{plain}
+
+\bibliography{refs}
+
+\end{document}
+

@@ -1,7 +1,7 @@
 #include the seanatility term in the model.
-
-library("Rcpp", lib.loc = '/home/duanq/ClimateProj/package/')
-library("RcppArmadillo", lib.loc = '/home/duanq/ClimateProj/package/')
+#packages Rcpp and RcppArmadillo are required
+library(Rcpp)
+library(RcppArmadillo)
 sourceCpp("SpatialQR_cpp.cpp")
 source("SpatialQR_QB_2.R")
 runid = 917 #as.numeric(Sys.getenv("PBS_ARRAY_INDEX"));
